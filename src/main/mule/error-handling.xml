@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+<mule xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd">
 	<error-handler name="error-handlingError_Handler" doc:id="b7c6d485-8bda-49b2-8a68-6f560cb210f1" >
-		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="58569260-032b-4428-86c6-24bd3bc81182" />
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="1c6b157c-fa0b-465f-a06a-466d9008790b" />
+		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="58569260-032b-4428-86c6-24bd3bc81182" >
+			<email:send doc:name="Send" doc:id="c9a1b252-b129-4ac9-8a35-89cf84989455" toAddresses=""/>
+		</on-error-continue>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="1c6b157c-fa0b-465f-a06a-466d9008790b" >
+			<email:send doc:name="Send" doc:id="c7fed87f-572c-43d1-a63e-440886e0bccd" />
+		</on-error-propagate>
 	</error-handler>
 </mule>
