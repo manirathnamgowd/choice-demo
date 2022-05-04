@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="4bc5234b-0b35-4104-ab85-5e6f007cd21d" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="choice-demoFlow" doc:id="f821022d-85d9-45c2-b7b3-b2c01a3a73b3" >
+		<http:listener doc:name="Listener" doc:id="3a1a4def-b0b1-4dd3-8dd4-5633f18af5aa" config-ref="HTTP_Listener_config" path="/choice-demo"/>
+		<choice doc:name="Choice" doc:id="24ca577c-4d89-4b78-996f-16e3c5806d8b" >
+			<when expression="#[attributes.queryParams.'age' as Number &gt; 60 and attributes.queryParams.'age' &lt;= 100]">
+				<ee:transform doc:name="Transform Message" doc:id="20816092-c27e-432f-8611-d4d41c9412b6" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+"Senior Citizen"]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.queryParams.'age' &gt; 18 and attributes.queryParams.'age' &lt; 60]">
+				<ee:transform doc:name="Transform Message" doc:id="9aba5dcb-b1ee-44c0-9c98-4293cbb6f475" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output text/plain
+---
+"Adults"]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.queryParams.'age' &gt;=13 and attributes.queryParams.'age' &lt;=18]">
+				<ee:transform doc:name="Transform Message" doc:id="46172731-e455-48c8-a015-bcdef82b9548" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output text/plain
+---
+"Teenage !"]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.queryParams.'age' &lt; 13 and attributes.queryParams.'age' &gt; 3]">
+				<ee:transform doc:name="Transform Message" doc:id="2a018e50-4e03-41fd-b235-5992bdbe10cd" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output text/plain
+---
+"Kids"]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[attributes.queryParams.'age' &gt; 100]">
+				<ee:transform doc:name="Transform Message" doc:id="bf10f259-c818-4956-bda9-2a3b1aa9aa6a" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output text/plain
+---
+"SuperMan/Woman"]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="5cb107d3-336b-42a8-a300-69de83a9b9e8" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output text/plain
+---
+"Babies"]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+	</flow>
+</mule>
